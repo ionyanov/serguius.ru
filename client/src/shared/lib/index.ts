@@ -1,0 +1,1 @@
+export { detectMobileDevice } from './detectMobileDevice';

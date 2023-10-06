@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  created   DateTime  @default(now())
+  updated   DateTime  @default(now()) @updatedAt
+  email     String    @unique
+  password  String
+  lockcount Int       @default(0)
+  lockflg   Boolean   @default(false)
+  lastlogin DateTime?
+}
+
+model Setting {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+  updated DateTime @default(now()) @updatedAt
+  name    String   @unique
+  value   String
+}
+
+model Category {
+  id              Int        @id @default(autoincrement())
+  created         DateTime   @default(now())
+  updated         DateTime   @default(now()) @updatedAt
+  name            String
+  link            String
+  visible         Boolean    @default(true)
+  parCategoryId   Int?
+  parCategory     Category?  @relation(name: "parentCategory", fields: [parCategoryId], references: [id])
+  childCategories Category[] @relation(name: "parentCategory")
+  pictures        Picture[]
+}
+
+model Picture {
+  id         Int      @id @default(autoincrement())
+  link       String
+  name       String
+  date       String?
+  material   String?
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+}

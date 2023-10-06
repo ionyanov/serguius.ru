@@ -1,0 +1,11 @@
+PassengerNodejs /home/o/onyano/.local/bin/node
+PassengerAppRoot /home/o/onyano/serguius.ru/public_html/api/dist
+PassengerAppType node
+PassengerStartupFile main.js
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !(\/api\/)
+RewriteCond %{REQUEST_URI} !^(.*index.txt*)$
+RewriteRule (.*) index.html [QSA,L]
