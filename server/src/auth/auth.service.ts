@@ -15,7 +15,7 @@ export class AuthService {
 		private readonly userSrv: UserService,
 		private readonly jwt: JwtService,
 		private readonly logger: LogService,
-	) {}
+	) { }
 
 	async register(body: AuthDto) {
 		let user: User;
@@ -38,6 +38,19 @@ export class AuthService {
 		const tokens = await this.issueTokes(user.id);
 
 		return { user: this.userSrv.returnAuthUserFields(user), ...tokens };
+	}
+
+	async getProfile(userId: string) {
+		let user: User;
+		try {
+			if (!userId)
+				throw new BadRequestException('Can`t find user!');
+			user = await this.userSrv.getUserById(+userId);
+		}
+		catch (e) {
+			await this.logger.LogMessage(e, 'Can`t find user!');
+		}
+		return this.userSrv.returnAuthUserFields(user);
 	}
 
 	async setPassword(dataDto: PasswordDto) {

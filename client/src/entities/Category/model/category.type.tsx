@@ -3,5 +3,5 @@ export interface CategoryType {
     name: string;
     link: string;
     visible: boolean;
-    order: number;
+    parCategoryId?: number;
 }

@@ -10,7 +10,7 @@ const categoryApi = rtkAPI.enhanceEndpoints({ addTagTypes: [tag] }).injectEndpoi
 			}),
 			providesTags: [tag]
 		}),
-		upsertCategory: build.mutation<CategoryType, CategoryType>({
+		setCategory: build.mutation<CategoryType, CategoryType>({
 			query: (category) => ({
 				url: '/category',
 				method: 'POST',
@@ -18,33 +18,33 @@ const categoryApi = rtkAPI.enhanceEndpoints({ addTagTypes: [tag] }).injectEndpoi
 			}),
 			invalidatesTags: [tag]
 		}),
-		deleteCategory: build.mutation<undefined, number>({
+		delCategory: build.mutation<undefined, number>({
 			query: (id) => ({
 				url: `/category/${id}`,
 				method: 'DELETE'
 			}),
 			invalidatesTags: [tag]
 		}),
-		addProperty: build.mutation<undefined, { catId: number, propId: number }>({
-			query: ({ catId, propId }) => ({
-				url: `/category/${catId}/${propId}`,
+		moveUp: build.mutation<undefined, number>({
+			query: (id) => ({
+				url: `/category/${id}/up`,
 				method: 'POST'
 			}),
 			invalidatesTags: [tag]
 		}),
-		deleteProperty: build.mutation<undefined, { catId: number, propId: number }>({
-			query: ({ catId, propId }) => ({
-				url: `/category/${catId}/${propId}`,
-				method: 'DELETE'
+		moveDown: build.mutation<undefined, number>({
+			query: (id) => ({
+				url: `/category/${id}/down`,
+				method: 'POST'
 			}),
 			invalidatesTags: [tag]
-		})
+		}),
 	}),
 });
 
 
 export const { useGetCategoriesQuery,
-	useDeleteCategoryMutation,
-	useUpsertCategoryMutation,
-	useAddPropertyMutation,
-	useDeletePropertyMutation } = categoryApi;
+	useDelCategoryMutation,
+	useSetCategoryMutation,
+	useMoveUpMutation,
+	useMoveDownMutation } = categoryApi;

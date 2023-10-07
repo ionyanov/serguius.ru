@@ -9,7 +9,7 @@ export class SettingsService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: LogService,
-	) {}
+	) { }
 
 	async getAll() {
 		let result = {};
@@ -26,7 +26,7 @@ export class SettingsService {
 		return result;
 	}
 
-	async get(name: string) {
+	async getSettings(name: string) {
 		let result = '';
 		try {
 			const settings = await this.prisma.setting.findFirst({
@@ -44,7 +44,7 @@ export class SettingsService {
 		return result;
 	}
 
-	async upsert(settingDto: SettingsDto) {
+	async setSettings(settingDto: SettingsDto) {
 		let settings = {};
 		try {
 			settings = await this.prisma.setting.upsert({
@@ -65,7 +65,7 @@ export class SettingsService {
 		return settings;
 	}
 
-	async remove(name: string) {
+	async delSettings(name: string) {
 		let settings = {};
 		try {
 			settings = await this.prisma.setting.deleteMany({

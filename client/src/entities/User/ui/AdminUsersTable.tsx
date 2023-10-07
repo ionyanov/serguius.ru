@@ -25,7 +25,15 @@ export const AdminUsersTable: FC = () => {
 
     useEffect(() => {
         setIsLoading(props.isLoading || updateUserDataProps.isLoading);
-        setError(JSON.stringify(updateUserDataProps.error));
+        setError(
+            updateUserDataProps.error
+                ? JSON.stringify(
+                      'data' in updateUserDataProps.error!
+                          ? updateUserDataProps.error.data
+                          : updateUserDataProps.error,
+                  )
+                : '',
+        );
     }, [props, updateUserDataProps]);
 
     const onSave = useCallback((item: IAdminUser) => {

@@ -1,17 +1,20 @@
 import {
 	Body,
 	Controller,
+	Get,
 	HttpCode,
+	Param,
 	Post,
 	UsePipes,
 	ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto, PasswordDto, RefreshTokenDto } from './auth.dto';
+import { Auth, CurrentUser } from 'src/_security';
 
 @Controller()
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(private readonly authService: AuthService) { }
 
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
@@ -34,6 +37,15 @@ export class AuthController {
 		return this.authService.getNewToken(body);
 	}
 
+	@Auth()
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
+	@Get('profile/:id')
+	async getProfile(@CurrentUser('id') @Param('id') id: string) {
+		return this.authService.getProfile(id);
+	}
+
+	@Auth()
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post('changepass')

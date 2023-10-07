@@ -19,8 +19,8 @@ import { TablePage } from '@/shared/ui';
 
 export const SettingEditTable: FC = () => {
     const { data, ...props } = useInitSettingsQuery();
-    const [upsertSettings, upsertSettingsProps] = useUpsertSettingsMutation();
-    const [deleteSettings, deleteSettingsProps] = useDeleteSettingsMutation();
+    const [setSettings, setSettingsProps] = useUpsertSettingsMutation();
+    const [delSettings, delSettingsProps] = useDeleteSettingsMutation();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -28,24 +28,25 @@ export const SettingEditTable: FC = () => {
     useEffect(() => {
         setIsLoading(
             props.isLoading ||
-                upsertSettingsProps.isLoading ||
-                deleteSettingsProps.isLoading,
+                setSettingsProps.isLoading ||
+                delSettingsProps.isLoading,
         );
         setError(
-            JSON.stringify([
-                props.error,
-                upsertSettingsProps.error,
-                deleteSettingsProps.error,
-            ]),
+            [props.error, setSettingsProps.error, delSettingsProps.error]
+                .filter((item) => item)
+                .map((item) =>
+                    JSON.stringify('data' in item! ? item.data : item),
+                )
+                .join('; '),
         );
-    }, [props, upsertSettingsProps, deleteSettingsProps]);
+    }, [props, setSettingsProps, delSettingsProps]);
 
     const onSave = useCallback((name: string, value: string) => {
-        upsertSettings({ name, value });
+        setSettings({ name, value });
     }, []);
 
     const onDelete = useCallback((name: string) => {
-        deleteSettings(name);
+        delSettings(name);
     }, []);
 
     return (

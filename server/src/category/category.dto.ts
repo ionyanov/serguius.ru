@@ -3,5 +3,5 @@ export class CategoryDto {
 	name: string;
 	link: string;
 	visible: boolean;
-	order: number;
+	parCategoryId?: number;
 }

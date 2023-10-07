@@ -48,7 +48,7 @@ const customFetchBase: BaseQueryFn<
                     result = await baseQuery(args, api, extraOptions);
                 } else {
                     StorageServices.clearStorage();
-                    //window.location.href = '/login';
+                    window.location.href = '/';
                 }
             } finally {
                 // release must be called once the mutex should be released again.

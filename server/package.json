@@ -9,8 +9,8 @@
     "build": "set NODE_ENV=production && nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
-    "dev": "nest start --debug --watch",
+    "dev": "nest start --watch",
+    "debug": "nest start --debug --watch",
     "start:prod": "set NODE_ENV=production && node dist/main"
   },
   "dependencies": {

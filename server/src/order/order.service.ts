@@ -14,7 +14,7 @@ export class OrderService {
 		private readonly user: UserService,
 		private readonly mailer: MailerService,
 		private readonly settings: SettingsService,
-	) {}
+	) { }
 
 	async makeorder(body: OdrerDto) {
 		let result;
@@ -24,10 +24,10 @@ export class OrderService {
 				this.user.create(body.email, process.env.PASSWORD_DEFAULT);
 			result = await this.mailer
 				.sendMail({
-					to: await this.settings.get('Email'),
+					to: await this.settings.getSettings('Email'),
 					from: process.env.MAILER_USER,
 					replyTo: body.email,
-					subject: await this.settings.get('Order subject'),
+					subject: await this.settings.getSettings('Order subject'),
 					html: body.text,
 					text: body.text.replaceAll(/<[^>]+>/g, ''),
 				})

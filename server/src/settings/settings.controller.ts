@@ -15,7 +15,7 @@ import { Auth } from 'src/_security';
 
 @Controller('settings')
 export class SettingsController {
-	constructor(private readonly settingsService: SettingsService) {}
+	constructor(private readonly settingsService: SettingsService) { }
 
 	@HttpCode(200)
 	@Get()
@@ -27,15 +27,15 @@ export class SettingsController {
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Post()
-	create(@Body() settingDto: SettingsDto) {
-		return this.settingsService.upsert(settingDto);
+	setSettings(@Body() settingDto: SettingsDto) {
+		return this.settingsService.setSettings(settingDto);
 	}
 
 	@Auth()
 	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
 	@Delete(':name')
-	remove(@Param('name') name: string) {
-		return this.settingsService.remove(name);
+	delSettings(@Param('name') name: string) {
+		return this.settingsService.delSettings(name);
 	}
 }

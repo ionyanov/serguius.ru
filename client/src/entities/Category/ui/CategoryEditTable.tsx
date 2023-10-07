@@ -11,16 +11,20 @@ import {
 import { CategoryType } from '../model/category.type';
 import { CategoryEditRow } from './CategoryEditRow';
 import {
-    useDeleteCategoryMutation,
+    useDelCategoryMutation,
     useGetCategoriesQuery,
-    useUpsertCategoryMutation,
+    useMoveDownMutation,
+    useMoveUpMutation,
+    useSetCategoryMutation,
 } from '../model/category.api';
 import { TablePage } from '@/shared/ui';
 
 export const CategoryEditTable: FC = () => {
     const { data, ...props } = useGetCategoriesQuery();
-    const [upsertCategory, upsertCategoryProps] = useUpsertCategoryMutation();
-    const [deleteCategory, deleteCategoryProps] = useDeleteCategoryMutation();
+    const [setCategory, setCategoryProps] = useSetCategoryMutation();
+    const [delCategory, delCategoryProps] = useDelCategoryMutation();
+    const [moveUp, moveUpProps] = useMoveUpMutation();
+    const [moveDown, moveDownProps] = useMoveDownMutation();
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -28,24 +32,41 @@ export const CategoryEditTable: FC = () => {
     useEffect(() => {
         setIsLoading(
             props.isLoading ||
-                upsertCategoryProps.isLoading ||
-                deleteCategoryProps.isLoading,
+                setCategoryProps.isLoading ||
+                delCategoryProps.isLoading ||
+                moveUpProps.isLoading ||
+                moveDownProps.isLoading,
         );
         setError(
-            JSON.stringify([
+            [
                 props.error,
-                upsertCategoryProps.error,
-                deleteCategoryProps.error,
-            ]),
+                setCategoryProps.error,
+                delCategoryProps.error,
+                moveUpProps.error,
+                moveDownProps.error,
+            ]
+                .filter((item) => item)
+                .map((item) =>
+                    JSON.stringify('data' in item! ? item.data : item),
+                )
+                .join('; '),
         );
-    }, [props, upsertCategoryProps, deleteCategoryProps]);
+    }, [props, setCategoryProps, delCategoryProps, moveUpProps, moveDownProps]);
 
     const onSave = useCallback((item: CategoryType) => {
-        upsertCategory(item);
+        setCategory(item);
     }, []);
 
     const onDelete = useCallback((id: number) => {
-        deleteCategory(id);
+        delCategory(id);
+    }, []);
+
+    const onMoveUp = useCallback((id: number) => {
+        moveUp(id);
+    }, []);
+
+    const onMoveDown = useCallback((id: number) => {
+        moveDown(id);
     }, []);
 
     return (
@@ -57,11 +78,11 @@ export const CategoryEditTable: FC = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Order</TableCell>
+                            <TableCell>Up</TableCell>
+                            <TableCell>Down</TableCell>
                             <TableCell>Visible?</TableCell>
                             <TableCell width={'30%'}>Name</TableCell>
                             <TableCell width={'20%'}>Link</TableCell>
-                            <TableCell width={'50%'}>Properties</TableCell>
                             <TableCell>Save</TableCell>
                             <TableCell>Delete</TableCell>
                         </TableRow>
@@ -74,6 +95,8 @@ export const CategoryEditTable: FC = () => {
                                     key={item.id}
                                     onSave={onSave}
                                     onDelete={onDelete}
+                                    onUp={onMoveUp}
+                                    onDown={onMoveDown}
                                     readonly={isLoading}
                                     onLoading={setIsLoading}
                                 />
@@ -83,11 +106,9 @@ export const CategoryEditTable: FC = () => {
                                 id: 0,
                                 link: '',
                                 name: '',
-                                order: (data?.length ?? 0) + 1,
                                 visible: true,
                             }}
                             onSave={onSave}
-                            onDelete={onDelete}
                             readonly={isLoading}
                             onLoading={setIsLoading}
                         />

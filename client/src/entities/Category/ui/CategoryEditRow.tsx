@@ -15,6 +15,8 @@ interface CategoryEditRowProps {
     readonly: boolean;
     onSave?: (item: CategoryType) => void;
     onDelete?: (id: number) => void;
+    onUp?: (id: number) => void;
+    onDown?: (id: number) => void;
     onLoading?: (isLoad: boolean) => void;
 }
 
@@ -22,7 +24,6 @@ export const CategoryEditRow: FC<CategoryEditRowProps> = (props) => {
     const [canSave, setCanSave] = useState(false);
     const [editedName, setEditedName] = useState(props.item.name);
     const [editedLink, setEditedLink] = useState(props.item.link);
-    const [editedOrder, setEditedOrder] = useState(props.item.order);
     const [editedVisible, setEditedVisible] = useState(
         props.item.visible ?? true,
     );
@@ -43,17 +44,15 @@ export const CategoryEditRow: FC<CategoryEditRowProps> = (props) => {
     useEffect(() => {
         setEditedName(props.item.name);
         setEditedLink(props.item.link);
-        setEditedOrder(props.item.order);
         setEditedVisible(props.item.visible);
     }, [props.item]);
 
     useEffect(() => {
         setCanSave(
             props.item.name != editedName ||
-                props.item.order != editedOrder ||
                 props.item.visible != editedVisible,
         );
-    }, [props.item, editedName, editedOrder, editedVisible]);
+    }, [props.item, editedName, editedVisible]);
 
     const onSaveClick = useCallback(() => {
         if (props.onSave)
@@ -62,9 +61,8 @@ export const CategoryEditRow: FC<CategoryEditRowProps> = (props) => {
                 name: editedName,
                 link: editedLink,
                 visible: editedVisible,
-                order: editedOrder,
             });
-    }, [props.item, editedName, editedLink, editedVisible, editedOrder]);
+    }, [props.item, editedName, editedLink, editedVisible]);
 
     const onDeleteClick = useCallback(() => {
         if (props.onDelete)
@@ -75,17 +73,22 @@ export const CategoryEditRow: FC<CategoryEditRowProps> = (props) => {
     return (
         <TableRow>
             <TableCell>
-                <TextField
-                    error={editedOrder != props.item.order}
-                    label={editedOrder == props.item.order ? '' : 'Edited'}
-                    value={editedOrder}
-                    onChange={(event) =>
-                        setEditedOrder(Number.parseInt(event.target.value))
-                    }
-                    variant={'outlined'}
-                    fullWidth
-                    disabled={props.readonly}
-                />
+                <Button
+                    onClick={() => {
+                        if (props.onUp) props.onUp(props.item.id);
+                    }}
+                    disabled={props.readonly || props.item.id == 0}>
+                    <Icons.ArrowUpward />
+                </Button>
+            </TableCell>
+            <TableCell>
+                <Button
+                    onClick={() => {
+                        if (props.onDown) props.onDown(props.item.id);
+                    }}
+                    disabled={props.readonly || props.item.id == 0}>
+                    <Icons.ArrowDownward />
+                </Button>
             </TableCell>
             <TableCell align="center">
                 <Checkbox
@@ -107,7 +110,6 @@ export const CategoryEditRow: FC<CategoryEditRowProps> = (props) => {
                 />
             </TableCell>
             <TableCell>{editedLink}</TableCell>
-            <TableCell></TableCell>
             <TableCell align="center">
                 <Button
                     onClick={onSaveClick}

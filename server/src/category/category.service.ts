@@ -32,12 +32,12 @@ export class CategoryService {
 		return result;
 	}
 
-	async getAll() {
+	async getCategories() {
 		let result = {};
 		try {
 			result = await this.prisma.category.findMany({
 				orderBy: {
-					name: 'asc',
+					order: 'asc',
 				},
 			});
 		} catch (e) {
@@ -46,19 +46,24 @@ export class CategoryService {
 		return result;
 	}
 
-	async upsert(categoryDto: CategoryDto) {
-		let settings = {};
+	async setCategory(categoryDto: CategoryDto) {
+		let result = {};
 		try {
-			settings = await this.prisma.category.upsert({
+			const cnt = await this.prisma.category.count()
+
+			result = await this.prisma.category.upsert({
 				create: {
 					name: categoryDto.name,
 					link: categoryDto.link,
 					visible: categoryDto.visible,
+					order: cnt,
+					parCategoryId: categoryDto.parCategoryId
 				},
 				update: {
 					name: categoryDto.name,
 					link: categoryDto.link,
 					visible: categoryDto.visible,
+					parCategoryId: categoryDto.parCategoryId
 				},
 				where: {
 					id: categoryDto.id,
@@ -67,10 +72,10 @@ export class CategoryService {
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Error getting settings');
 		}
-		return settings;
+		return result;
 	}
 
-	async remove(id: number) {
+	async delCategory(id: number) {
 		let result = {};
 		try {
 			result = await this.prisma.category.deleteMany({
@@ -80,6 +85,43 @@ export class CategoryService {
 			});
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Error deleting settings');
+		}
+		return result;
+	}
+
+	async moveCategory(id: number, duration: 'up' | 'down') {
+		let result;
+		try {
+			const cat = await this.prisma.category.findFirst({
+				select: {
+					parCategoryId: true,
+					order: true
+				},
+				where: {
+					id: id
+				}
+			});
+			//this.prisma.LogOn()
+			result = await this.prisma.category.updateMany({
+				data: {
+					order: cat.order
+				},
+				where: {
+					order: duration == 'up' ? cat.order - 1 : cat.order + 1,
+					parCategoryId: cat.parCategoryId
+				},
+			});
+			if (result.count > 0)
+				result = await this.prisma.category.updateMany({
+					data: {
+						order: duration == 'up' ? cat.order - 1 : cat.order + 1
+					},
+					where: {
+						id: id
+					},
+				});
+		} catch (e) {
+			await this.logger.LogMessage(e, 'Error move category');
 		}
 		return result;
 	}
