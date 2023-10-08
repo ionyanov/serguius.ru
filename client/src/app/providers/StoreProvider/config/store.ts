@@ -7,7 +7,6 @@ import {
     type ThunkDispatch,
 } from '@reduxjs/toolkit';
 import { userReducer } from '@/entities/User';
-import { $api } from '@/shared/api/api';
 import { rtkAPI } from '@/shared/api/rtkAPI';
 import { createdReducerManager } from './reducerManager';
 import { type ReduxStoreWithManager, type StateSchema } from './StateSchema';
@@ -29,13 +28,7 @@ export function createReduxStore(
         devTools: import.meta.env.DEV,
         preloadedState: initialState,
         middleware: (getDefaultMiddleware) =>
-            getDefaultMiddleware({
-                thunk: {
-                    extraArgument: {
-                        api: $api,
-                    },
-                },
-            }).concat(rtkAPI.middleware),
+            getDefaultMiddleware().concat(rtkAPI.middleware),
     });
     store.reducerManager = reducerManager;
 

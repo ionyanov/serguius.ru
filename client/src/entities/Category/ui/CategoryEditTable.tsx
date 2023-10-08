@@ -9,7 +9,7 @@ import {
     TableRow,
 } from '@mui/material';
 import { CategoryType } from '../model/category.type';
-import { CategoryEditRow } from './CategoryEditRow';
+import { CategoryEditRow } from './CategoryEditItem';
 import {
     useDelCategoryMutation,
     useGetCategoriesQuery,
@@ -18,9 +18,13 @@ import {
     useSetCategoryMutation,
 } from '../model/category.api';
 import { TablePage } from '@/shared/ui';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { TreeView, TreeItem } from '@mui/x-tree-view';
+import { CategoryEditGroup } from './CategoryEditGroup';
 
 export const CategoryEditTable: FC = () => {
-    const { data, ...props } = useGetCategoriesQuery();
+    const { data, ...dataProps } = useGetCategoriesQuery();
     const [setCategory, setCategoryProps] = useSetCategoryMutation();
     const [delCategory, delCategoryProps] = useDelCategoryMutation();
     const [moveUp, moveUpProps] = useMoveUpMutation();
@@ -31,7 +35,7 @@ export const CategoryEditTable: FC = () => {
 
     useEffect(() => {
         setIsLoading(
-            props.isLoading ||
+            dataProps.isLoading ||
                 setCategoryProps.isLoading ||
                 delCategoryProps.isLoading ||
                 moveUpProps.isLoading ||
@@ -39,7 +43,7 @@ export const CategoryEditTable: FC = () => {
         );
         setError(
             [
-                props.error,
+                dataProps.error,
                 setCategoryProps.error,
                 delCategoryProps.error,
                 moveUpProps.error,
@@ -51,7 +55,13 @@ export const CategoryEditTable: FC = () => {
                 )
                 .join('; '),
         );
-    }, [props, setCategoryProps, delCategoryProps, moveUpProps, moveDownProps]);
+    }, [
+        dataProps,
+        setCategoryProps,
+        delCategoryProps,
+        moveUpProps,
+        moveDownProps,
+    ]);
 
     const onSave = useCallback((item: CategoryType) => {
         setCategory(item);
@@ -72,35 +82,23 @@ export const CategoryEditTable: FC = () => {
     return (
         <TablePage
             error={error}
-            refresh={props.refetch}
+            refresh={dataProps.refetch}
             title="Categories administration">
-            <TableContainer component={Paper} aria-readonly={isLoading}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Up</TableCell>
-                            <TableCell>Down</TableCell>
-                            <TableCell>Visible?</TableCell>
-                            <TableCell width={'30%'}>Name</TableCell>
-                            <TableCell width={'20%'}>Link</TableCell>
-                            <TableCell>Save</TableCell>
-                            <TableCell>Delete</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data &&
-                            data.map((item) => (
-                                <CategoryEditRow
-                                    item={item}
-                                    key={item.id}
-                                    onSave={onSave}
-                                    onDelete={onDelete}
-                                    onUp={onMoveUp}
-                                    onDown={onMoveDown}
-                                    readonly={isLoading}
-                                    onLoading={setIsLoading}
-                                />
-                            ))}
+            <TreeView
+                sx={{ width: '100%' }}
+                defaultCollapseIcon={<ExpandMoreIcon />}
+                defaultExpandIcon={<ChevronRightIcon />}>
+                <CategoryEditGroup
+                    onSave={onSave}
+                    onDelete={onDelete}
+                    onUp={onMoveUp}
+                    onDown={onMoveDown}
+                    readonly={isLoading}
+                    onLoading={setIsLoading}
+                />
+                <TreeItem
+                    nodeId={`0new`}
+                    label={
                         <CategoryEditRow
                             item={{
                                 id: 0,
@@ -112,9 +110,9 @@ export const CategoryEditTable: FC = () => {
                             readonly={isLoading}
                             onLoading={setIsLoading}
                         />
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                    }
+                />
+            </TreeView>
         </TablePage>
     );
 };

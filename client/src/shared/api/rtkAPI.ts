@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { StorageServices } from '../helpers/auth.helper';
+import { StorageServices } from '../lib/auth.helper';
 import {
     BaseQueryFn,
     FetchArgs,

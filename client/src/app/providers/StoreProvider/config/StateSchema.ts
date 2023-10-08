@@ -8,12 +8,10 @@ import {
 import { type AxiosInstance } from 'axios';
 import { type rtkAPI } from '@/shared/api/rtkAPI';
 import { type IUserSchema } from '@/entities/User';
-import { type LoginSchema } from '@/features/Login/model/login.type';
 
 export interface StateSchema {
     user: IUserSchema;
     // Async
-    loginForm?: LoginSchema;
     [rtkAPI.reducerPath]: ReturnType<typeof rtkAPI.reducer>;
 }
 
@@ -33,11 +31,6 @@ export interface ReduxStoreWithManager extends EnhancedStore<StateSchema> {
     reducerManager?: ReducerManager;
 }
 
-export interface ThunkExtraArgs {
-    api: AxiosInstance;
-}
-
 export interface ThunkConfig<T> {
     rejectValue: T;
-    extra: ThunkExtraArgs;
 }

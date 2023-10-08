@@ -1,4 +1,4 @@
-import {IUser} from "@/entities/User";
+import { IUser } from "@/entities/User";
 
 export interface LoginRequest {
 	email: string;
@@ -9,15 +9,4 @@ export interface LoginResponse {
 	user: IUser,
 	accessToken: string;
 	refreshToken: string;
-}
-
-export interface RefreshToken {
-	refreshToken: string;
-}
-
-export interface LoginSchema {
-	username: string;
-	password: string;
-	isLoading: boolean;
-	error?: string;
 }

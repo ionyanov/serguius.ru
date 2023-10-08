@@ -1,2 +1,2 @@
-export { buildSlice } from '@/shared/lib/store/buildSlice';
-export { buildSelector } from '@/shared/lib/store/buildSelector';
+export { buildSlice } from './buildSlice';
+export { buildSelector } from './buildSelector';

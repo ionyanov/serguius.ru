@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.6",
     "@mui/material": "^5.14.6",
+    "@mui/x-tree-view": "^6.0.0-beta.0",
     "@reduxjs/toolkit": "^1.9.5",
     "async-mutex": "^0.4.0",
     "axios": "^1.4.0",

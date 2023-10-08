@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -59,7 +60,7 @@ export class AuthService {
 				dataDto.email,
 				dataDto.password,
 			);
-			if (!user) throw new UnauthorizedException('Wrong credencial!');
+			if (!user) throw new ForbiddenException('Wrong credencial!');
 			await this.userSrv.setPassword(user.id, dataDto.newPassword);
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Can`t set password!');

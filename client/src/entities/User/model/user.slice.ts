@@ -2,7 +2,7 @@ import { type PayloadAction } from '@reduxjs/toolkit';
 import { buildSlice } from '@/shared/lib/store';
 import { initAuthData } from './user.services';
 import { type IUser, type IUserSchema } from './user.types';
-import { StorageServices } from '@/shared/helpers/auth.helper';
+import { StorageServices } from '@/shared/lib/auth.helper';
 
 const initialState: IUserSchema = {
     isInit: false,

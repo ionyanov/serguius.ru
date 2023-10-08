@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { LogService } from '../log.service';
 import { CategoryDto } from './category.dto';
+import { async } from 'rxjs';
 
 @Injectable()
 export class CategoryService {
@@ -49,14 +50,18 @@ export class CategoryService {
 	async setCategory(categoryDto: CategoryDto) {
 		let result = {};
 		try {
-			const cnt = await this.prisma.category.count()
+			const sameCat = await this.prisma.category.findMany({
+				where: {
+					parCategoryId: categoryDto.parCategoryId
+				}
+			})
 
 			result = await this.prisma.category.upsert({
 				create: {
 					name: categoryDto.name,
 					link: categoryDto.link,
 					visible: categoryDto.visible,
-					order: cnt,
+					order: sameCat.length,
 					parCategoryId: categoryDto.parCategoryId
 				},
 				update: {
@@ -78,6 +83,34 @@ export class CategoryService {
 	async delCategory(id: number) {
 		let result = {};
 		try {
+			let category = await this.prisma.category.findFirst({
+				where: {
+					id: id
+				}
+			})
+			await this.prisma.category.findMany({
+				where: {
+					AND: [
+						{ parCategoryId: category.parCategoryId }
+					],
+					NOT: {
+						id: id
+					}
+				},
+				orderBy: {
+					order: 'asc'
+				}
+			}).then(categories => categories.map(async (cat, index) => {
+				await this.prisma.category.update({
+					data: {
+						order: index
+					},
+					where: {
+						id: cat.id
+					}
+				}
+				)
+			}))
 			result = await this.prisma.category.deleteMany({
 				where: {
 					id: id,
@@ -101,7 +134,6 @@ export class CategoryService {
 					id: id
 				}
 			});
-			//this.prisma.LogOn()
 			result = await this.prisma.category.updateMany({
 				data: {
 					order: cat.order

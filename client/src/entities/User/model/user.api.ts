@@ -19,6 +19,6 @@ const userApi = rtkAPI.injectEndpoints({
     }),
 });
 
-export const { useGetUserDataQuery, useSetUserDataMutation } = userApi;
+export const { useGetUserDataQuery } = userApi;
 
 export const getUserDataQuery = userApi.endpoints.getUserData.initiate

@@ -8,7 +8,7 @@ import { SettingsModule } from './settings/settings.module';
 import { LogService } from './log.service';
 import { CategoryModule } from './category/category.module';
 import { UserModule } from './user/user.module';
-import { ImagesModule } from './images/images.module';
+import { ImagesModule } from './picture/picture.module';
 import { OrderModule } from './order/order.module';
 
 const ENV = process.env.NODE_ENV;
@@ -26,4 +26,4 @@ const ENV = process.env.NODE_ENV;
 	controllers: [AppController],
 	providers: [AppService, PrismaService, LogService],
 })
-export class AppModule {}
+export class AppModule { }

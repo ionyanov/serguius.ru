@@ -10,8 +10,8 @@ enum COLORS {
 export const NCSTheme = createTheme({
     palette: {
         primary: {
-            main: COLORS.MAIN_LIGHT,
-            contrastText: COLORS.MAIN_DARK,
+            main: COLORS.MAIN_DARK,
+            contrastText: COLORS.RED,
             light: COLORS.MAIN_LIGHT,
             dark: COLORS.MAIN_DARK,
         },
@@ -140,28 +140,9 @@ export const NCSTheme = createTheme({
                     minWidth: 'unset',
                 },
                 contained: {
-                    color: COLORS.MAIN_DARK,
+                    color: COLORS.MAIN_LIGHT,
                 },
             },
-        },
-        ///////////////////////////
-        MuiLink: {
-            styleOverrides: {
-                root: {
-                    boxShadow: 'none',
-                    background: 'transparent',
-                    '&:hover': {
-                        color: COLORS.MAIN_DARK,
-                    },
-                },
-            },
-        },
-        MuiFormControl: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: `transparent`
-                }
-            }
         },
         MuiInputBase: {
             styleOverrides: {

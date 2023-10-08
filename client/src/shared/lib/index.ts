@@ -1,1 +1,2 @@
-export { detectMobileDevice } from './detectMobileDevice';
+export { StorageServices } from './auth.helper';
+export * from './store';

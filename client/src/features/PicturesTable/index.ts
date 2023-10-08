@@ -1,0 +1,1 @@
+export { PicturesTable } from './ui/PicturesTable'

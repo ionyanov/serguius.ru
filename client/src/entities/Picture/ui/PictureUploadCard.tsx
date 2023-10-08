@@ -1,32 +1,35 @@
 import { ChangeEvent, FC, useCallback } from 'react';
-import { $api } from '@/shared/api/api';
 import { DriveFolderUpload } from '@mui/icons-material';
+import { useUploadPictureMutation } from '../model/paimages.api';
 
-interface PAImagesUploadCardProps {
-    id: number;
+interface PictureloadCardProps {
+    category: string;
     refresh: () => void;
 }
 
-export const PAImagesUploadCard: FC<PAImagesUploadCardProps> = (args) => {
+export const PictureloadCard: FC<PictureloadCardProps> = (args) => {
+    const [uploadImage, uploadImageProps] = useUploadPictureMutation();
+
     const onFileChange = useCallback(
         async (event: ChangeEvent<HTMLInputElement>) => {
             let selectedFiles = event.target.files;
             if (selectedFiles) {
-                const formData = new FormData();
-                for (let i = 0; i < selectedFiles.length; i++) {
-                    let fl: File | null = selectedFiles.item(i);
-                    if (fl) formData.append(`files`, fl);
-                }
-                const res = await $api.post(
-                    `/images/${args.id}/upload`,
-                    formData,
-                );
-                if (args.refresh) {
-                    args.refresh();
+                let fl: File | null = selectedFiles.item(0);
+                if (fl) {
+                    const formData = new FormData();
+                    formData.append(`file`, fl);
+                    uploadImage({
+                        category: args.category,
+                        data: formData,
+                    }).then(() => {
+                        if (args.refresh) {
+                            args.refresh();
+                        }
+                    });
                 }
             }
         },
-        [args.id],
+        [args.category],
     );
 
     return (
@@ -41,7 +44,6 @@ export const PAImagesUploadCard: FC<PAImagesUploadCardProps> = (args) => {
                 type="file"
                 accept=".jpg, .png, .jpeg, .gif"
                 onChange={onFileChange}
-                multiple
                 style={{ display: 'none' }}
             />
             <DriveFolderUpload />
