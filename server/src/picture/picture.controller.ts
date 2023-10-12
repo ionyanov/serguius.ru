@@ -31,27 +31,41 @@ export class PictureController {
 		this.pictureService.addPicture(category, file);
 	}
 
+	@Get()
+	@HttpCode(200)
+	public async getAllPictures() {
+		return this.pictureService.getPictures();
+	}
+
+	@Get('/id/:id')
+	@HttpCode(200)
+	public async getPicturesById(@Param('id') id: string) {
+		return this.pictureService.getPicturesById(+id);
+	}
+
 	@Get(':category')
 	@HttpCode(200)
 	public async getPictures(@Param('category') category: string) {
 		return this.pictureService.getPictures(category);
 	}
 
+	@Get('random/:count')
+	@HttpCode(200)
+	public async getRandom(@Param('count') count: string) {
+		return this.pictureService.getRandom(+count);
+	}
+
 	@Auth()
 	@Post()
 	@HttpCode(200)
-	public async setPicture(
-		@Body() data: IPictureDto,
-	) {
+	public async setPicture(@Body() data: IPictureDto) {
 		return this.pictureService.setPicture(data);
 	}
 
 	@Auth()
 	@Delete(':picId')
 	@HttpCode(200)
-	public async delPicture(
-		@Param('picId') picId: string,
-	) {
+	public async delPicture(@Param('picId') picId: string) {
 		return this.pictureService.delPicture(+picId);
 	}
 }

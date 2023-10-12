@@ -19,6 +19,8 @@ export class CategoryService {
 					id: true,
 					name: true,
 					link: true,
+					parCategoryId: true,
+
 				},
 				where: {
 					visible: true,
