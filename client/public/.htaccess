@@ -1,5 +1,5 @@
 PassengerNodejs /home/o/onyano/.local/bin/node
-PassengerAppRoot /home/o/onyano/serguius.ru/public_html/api/dist
+PassengerAppRoot /home/o/onyano/admin.serguius.ru/public_html/api/dist
 PassengerAppType node
 PassengerStartupFile main.js
 

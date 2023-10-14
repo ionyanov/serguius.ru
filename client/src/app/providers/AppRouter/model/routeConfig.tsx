@@ -1,8 +1,8 @@
 import { type AppRouteProps } from '@/shared/types/router';
 import {
     AppRoutes,
-    getRouteAdmin,
     getRouteAdminCategories,
+    getRouteAdminLogs,
     getRouteAdminSettings,
     getRouteAdminUsers,
     getRouteForbidden,
@@ -17,6 +17,7 @@ import {
     ForbiddenPage,
     NotFoundPage,
 } from '@/pages';
+import { AdminLogsPage } from '@/pages/AdminLogsPage';
 
 export const routeConfig: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.MAIN]: {
@@ -24,11 +25,6 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
         element: <MainPage />,
     },
 
-    [AppRoutes.ADMIN_PANEL]: {
-        path: getRouteAdmin(),
-        element: <MainPage />,
-        authOnly: true,
-    },
     [AppRoutes.ADMIN_USERS]: {
         path: getRouteAdminUsers(),
         element: <AdminUsersPage />,
@@ -42,6 +38,11 @@ export const routeConfig: Record<AppRoutes, AppRouteProps> = {
     [AppRoutes.ADMIN_CATEGORIES]: {
         path: getRouteAdminCategories(),
         element: <AdminCategoryesPage />,
+        authOnly: true,
+    },
+    [AppRoutes.ADMIN_LOGS]: {
+        path: getRouteAdminLogs(),
+        element: <AdminLogsPage />,
         authOnly: true,
     },
 

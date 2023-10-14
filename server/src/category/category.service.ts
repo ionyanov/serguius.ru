@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { LogService } from '../log.service';
 import { CategoryDto } from './category.dto';
-import { async } from 'rxjs';
 
 @Injectable()
 export class CategoryService {
@@ -20,7 +19,6 @@ export class CategoryService {
 					name: true,
 					link: true,
 					parCategoryId: true,
-
 				},
 				where: {
 					visible: true,
@@ -35,10 +33,11 @@ export class CategoryService {
 		return result;
 	}
 
-	async getCategories() {
+	async getCategories(where?: any) {
 		let result = {};
 		try {
 			result = await this.prisma.category.findMany({
+				where: { ...where },
 				orderBy: {
 					order: 'asc',
 				},
@@ -54,9 +53,9 @@ export class CategoryService {
 		try {
 			const sameCat = await this.prisma.category.findMany({
 				where: {
-					parCategoryId: categoryDto.parCategoryId
-				}
-			})
+					parCategoryId: categoryDto.parCategoryId,
+				},
+			});
 
 			result = await this.prisma.category.upsert({
 				create: {
@@ -64,13 +63,13 @@ export class CategoryService {
 					link: categoryDto.link,
 					visible: categoryDto.visible,
 					order: sameCat.length,
-					parCategoryId: categoryDto.parCategoryId
+					parCategoryId: categoryDto.parCategoryId,
 				},
 				update: {
 					name: categoryDto.name,
 					link: categoryDto.link,
 					visible: categoryDto.visible,
-					parCategoryId: categoryDto.parCategoryId
+					parCategoryId: categoryDto.parCategoryId,
 				},
 				where: {
 					id: categoryDto.id,
@@ -87,32 +86,33 @@ export class CategoryService {
 		try {
 			let category = await this.prisma.category.findFirst({
 				where: {
-					id: id
-				}
-			})
-			await this.prisma.category.findMany({
-				where: {
-					AND: [
-						{ parCategoryId: category.parCategoryId }
-					],
-					NOT: {
-						id: id
-					}
+					id: id,
 				},
-				orderBy: {
-					order: 'asc'
-				}
-			}).then(categories => categories.map(async (cat, index) => {
-				await this.prisma.category.update({
-					data: {
-						order: index
-					},
+			});
+			await this.prisma.category
+				.findMany({
 					where: {
-						id: cat.id
-					}
-				}
-				)
-			}))
+						AND: [{ parCategoryId: category.parCategoryId }],
+						NOT: {
+							id: id,
+						},
+					},
+					orderBy: {
+						order: 'asc',
+					},
+				})
+				.then(categories =>
+					categories.map(async (cat, index) => {
+						await this.prisma.category.update({
+							data: {
+								order: index,
+							},
+							where: {
+								id: cat.id,
+							},
+						});
+					}),
+				);
 			result = await this.prisma.category.deleteMany({
 				where: {
 					id: id,
@@ -130,28 +130,28 @@ export class CategoryService {
 			const cat = await this.prisma.category.findFirst({
 				select: {
 					parCategoryId: true,
-					order: true
+					order: true,
 				},
 				where: {
-					id: id
-				}
+					id: id,
+				},
 			});
 			result = await this.prisma.category.updateMany({
 				data: {
-					order: cat.order
+					order: cat.order,
 				},
 				where: {
 					order: duration == 'up' ? cat.order - 1 : cat.order + 1,
-					parCategoryId: cat.parCategoryId
+					parCategoryId: cat.parCategoryId,
 				},
 			});
 			if (result.count > 0)
 				result = await this.prisma.category.updateMany({
 					data: {
-						order: duration == 'up' ? cat.order - 1 : cat.order + 1
+						order: duration == 'up' ? cat.order - 1 : cat.order + 1,
 					},
 					where: {
-						id: id
+						id: id,
 					},
 				});
 		} catch (e) {

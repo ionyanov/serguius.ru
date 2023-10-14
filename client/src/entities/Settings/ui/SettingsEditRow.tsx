@@ -42,38 +42,14 @@ export const SettingsEditRow: FC<SettingsEditRowProps> = (props) => {
                 <Typography variant="h3">{props.name}</Typography>
             </TableCell>
             <TableCell>
-                {props.name == Settings.BORDER ||
-                props.name == Settings.BORDER_SMALL ||
-                props.name == Settings.BORDER_POPULAR ||
-                props.name == Settings.BORDER_SALES ? (
-                    <Select
-                        error={editedValue != props.value}
-                        value={editedValue}
-                        onChange={(e) => setEditedValue(e.target.value)}
-                        variant={'outlined'}
-                        fullWidth
-                        disabled={props.readonly}></Select>
-                ) : props.name == Settings.ORDER_TEXT ? (
-                    <TextField
-                        error={editedValue != props.value}
-                        value={editedValue}
-                        multiline
-                        minRows={3}
-                        onChange={(e) => setEditedValue(e.target.value)}
-                        variant={'outlined'}
-                        fullWidth
-                        disabled={props.readonly}
-                    />
-                ) : (
-                    <TextField
-                        error={editedValue != props.value}
-                        value={editedValue}
-                        onChange={(e) => setEditedValue(e.target.value)}
-                        variant={'outlined'}
-                        fullWidth
-                        disabled={props.readonly}
-                    />
-                )}
+                <TextField
+                    error={editedValue != props.value}
+                    value={editedValue}
+                    onChange={(e) => setEditedValue(e.target.value)}
+                    variant={'outlined'}
+                    fullWidth
+                    disabled={props.readonly}
+                />
             </TableCell>
             <TableCell align="center">
                 <Button

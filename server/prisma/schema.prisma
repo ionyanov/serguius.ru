@@ -51,3 +51,15 @@ model Picture {
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
 }
+
+model Logs {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+  type    LogType  @default(INFO)
+  message String
+}
+
+enum LogType {
+  ERROR
+  INFO
+}

@@ -15,12 +15,13 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
+    Stack,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useLoginMutation } from '../model/login.api';
+import { useLoginMutation, useRegistrMutation } from '../model/login.api';
 import { StorageServices } from '@/shared/lib';
 import { IUser, userActions } from '@/entities/User';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib';
 
 export interface LoginFormProps {
     onSuccess?: () => void;
@@ -28,6 +29,8 @@ export interface LoginFormProps {
 
 export const LoginForm: FC<LoginFormProps> = memo((props: LoginFormProps) => {
     const [login, loginProps] = useLoginMutation();
+    const [registr, registrProps] = useRegistrMutation();
+
     const dispatch = useAppDispatch();
     const [showPassword, setShowPassword] = useState(false);
     const [username, setUserName] = useState('');
@@ -39,8 +42,11 @@ export const LoginForm: FC<LoginFormProps> = memo((props: LoginFormProps) => {
         if (loginProps.error)
             if ('data' in loginProps.error)
                 setError(JSON.stringify(loginProps.error.data));
-        setIsLoading(loginProps.isLoading);
-    }, [loginProps]);
+        if (registrProps.error)
+            if ('data' in registrProps.error)
+                setError(JSON.stringify(registrProps.error.data));
+        setIsLoading(loginProps.isLoading || registrProps.isLoading);
+    }, [loginProps, registrProps]);
 
     const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -73,6 +79,19 @@ export const LoginForm: FC<LoginFormProps> = memo((props: LoginFormProps) => {
                     StorageServices.setUserToStorage(args.data.user as IUser);
 
                     dispatch(userActions.setAuthData(args.data.user as IUser));
+                }
+        });
+        if (!error) props.onSuccess?.();
+    }, [username, password, props]);
+
+    const onRegistr = useCallback(async () => {
+        registr({
+            email: username,
+            password,
+        }).then((args) => {
+            if ('data' in args)
+                if ('user' in args.data) {
+                    setError('User create. For unlock ask owner of site.');
                 }
         });
         if (!error) props.onSuccess?.();
@@ -121,9 +140,23 @@ export const LoginForm: FC<LoginFormProps> = memo((props: LoginFormProps) => {
                     fullWidth
                 />
             </FormControl>
-            <Button onClick={onLogin} variant="outlined" disabled={isLoading}>
-                Login
-            </Button>
+            <Stack
+                direction={'row'}
+                width={'100%'}
+                justifyContent={'space-around'}>
+                <Button
+                    onClick={onRegistr}
+                    variant="outlined"
+                    disabled={isLoading}>
+                    Registr
+                </Button>
+                <Button
+                    onClick={onLogin}
+                    variant="outlined"
+                    disabled={isLoading}>
+                    Login
+                </Button>
+            </Stack>
             {error && <Alert severity="error">{error}</Alert>}
         </Grid>
     );

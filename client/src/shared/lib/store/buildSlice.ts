@@ -2,7 +2,7 @@ import type { CreateSliceOptions, SliceCaseReducers } from '@reduxjs/toolkit';
 import { bindActionCreators, createSlice } from '@reduxjs/toolkit';
 
 import { useMemo } from 'react';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useAppDispatch } from '../useAppDispatch';
 
 export function buildSlice<
     State,

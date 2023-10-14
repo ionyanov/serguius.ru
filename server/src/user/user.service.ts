@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	ForbiddenException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '@prisma/client';
 import { hash, verify } from 'argon2';
 import { LogService } from 'src/log.service';
@@ -10,7 +14,7 @@ export class UserService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: LogService,
-	) { }
+	) {}
 
 	async getUsers() {
 		let users: User[];
@@ -61,6 +65,7 @@ export class UserService {
 				data: {
 					email: email,
 					password: await hash(password),
+					lockflg: true,
 				},
 			});
 		} catch (e) {
@@ -74,8 +79,7 @@ export class UserService {
 		if (!user) throw new ForbiddenException('Wrong credencial!');
 		const isValid = await verify(user.password, password);
 		if (isValid) {
-			if (user.lockflg)
-				throw new ForbiddenException('Account locked!');
+			if (user.lockflg) throw new ForbiddenException('Account locked!');
 
 			await this.prisma.user.update({
 				data: {
@@ -88,8 +92,7 @@ export class UserService {
 				},
 			});
 		} else {
-			if (user.lockflg)
-				throw new ForbiddenException('Wrong credencial!');
+			if (user.lockflg) throw new ForbiddenException('Wrong credencial!');
 
 			if (user.lockcount + 1 >= +process.env.LOCK_LIMIT) {
 				await this.prisma.user.update({

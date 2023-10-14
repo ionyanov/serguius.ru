@@ -4,12 +4,13 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { Button, Container, MenuItem, Toolbar, AppBar } from '@mui/material';
 import { getUserAuthData, userActions } from '@/entities/User';
 import {
-    getRouteAdmin,
     getRouteAdminCategories,
+    getRouteAdminLogs,
     getRouteAdminSettings,
     getRouteAdminUsers,
+    getRouteMain,
 } from '@/shared/const/router';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
+import { useAppDispatch } from '@/shared/lib';
 
 export const Navbar: FC = memo(() => {
     const user = useSelector(getUserAuthData);
@@ -17,10 +18,11 @@ export const Navbar: FC = memo(() => {
     const location = useLocation();
 
     const adminMenu: Record<string, string> = {
-        Pictures: getRouteAdmin(),
+        Pictures: getRouteMain(),
         Categories: getRouteAdminCategories(),
         Settings: getRouteAdminSettings(),
         Users: getRouteAdminUsers(),
+        Logs: getRouteAdminLogs(),
     };
 
     const onLogout = useCallback(() => {

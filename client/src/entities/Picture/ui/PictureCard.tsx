@@ -30,19 +30,15 @@ export const PictureCard: FC<PictureCardProps> = ({ img }) => {
     }, [img, name, date, material]);
 
     return (
-        <Stack
-            gap={1}
-            spacing={1}
-            alignItems={'center'}
-            justifyContent={'center'}>
+        <Stack gap={1} spacing={1} alignItems={'center'} justifyContent={'end'}>
             <img
                 src={getImagePath(img.link)}
                 alt={img.name}
                 style={{
-                    width: '300px',
+                    width: '350px',
                     margin: '5px',
                 }}
-                height={'100%'}
+                height={'auto'}
             />
             <TextField
                 placeholder="Название"

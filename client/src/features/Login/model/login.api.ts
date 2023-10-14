@@ -10,7 +10,14 @@ const userAdminApi = rtkAPI.injectEndpoints({
 				body: data
 			}),
 		}),
+		Registr: build.mutation<LoginResponse, LoginRequest>({
+			query: (data) => ({
+				url: '/register',
+				method: 'POST',
+				body: data
+			}),
+		}),
 	}),
 });
 
-export const { useLoginMutation } = userAdminApi;
+export const { useLoginMutation, useRegistrMutation } = userAdminApi;

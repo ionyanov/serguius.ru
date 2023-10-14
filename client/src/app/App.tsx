@@ -1,10 +1,10 @@
-import { Box, Toolbar } from '@mui/material';
-import { Navbar } from '@/widgets/Navbar';
-import { AppRouter } from '@/app/providers/AppRouter';
-import { getUserIsInit, initAuthData } from '@/entities/User';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Box, Toolbar } from '@mui/material';
+import { useAppDispatch } from '@/shared/lib';
+import { AppRouter } from '@/app/providers/AppRouter';
+import { Navbar } from '@/widgets/Navbar';
+import { getUserIsInit, initAuthData } from '@/entities/User';
 import { Loader } from '@/shared/ui/Loader';
 
 function App() {

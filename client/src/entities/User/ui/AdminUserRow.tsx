@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
 import { IAdminUser } from '../model/user.types';
+import { formatDate } from '@/shared/lib/formatDate';
 
 interface AdminUserRowProps {
     item: IAdminUser;
@@ -39,14 +40,6 @@ export const AdminUserRow: FC<AdminUserRowProps> = (props) => {
         if (!editedLockFlg) newUser.lockcount = 0;
         if (props.onSave) props.onSave(newUser);
     }, [props.item, editedEmail, editedLockFlg]);
-
-    const formatDate = useCallback((param: Date): string => {
-        if (!param) return '';
-        const date = new Date(Date.parse(param as any));
-        return `${date.getDate()}.${
-            date.getUTCMonth() + 1
-        }.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-    }, []);
 
     return (
         <TableRow>

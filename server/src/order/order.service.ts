@@ -14,7 +14,7 @@ export class OrderService {
 		private readonly user: UserService,
 		private readonly mailer: MailerService,
 		private readonly settings: SettingsService,
-	) { }
+	) {}
 
 	async makeorder(body: OdrerDto) {
 		let result;

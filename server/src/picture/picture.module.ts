@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
-import { PictureService } from './picture.service';
 import { PictureController } from './picture.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, resolve } from 'path';
 import { LogService } from 'src/log.service';
 import { PrismaService } from 'src/prisma.service';
-var path = require('path');
+import { PictureService } from './picture.service';
+import { FileService } from 'src/file.service';
 
 @Module({
 	controllers: [PictureController],
-	providers: [PictureService, PrismaService, LogService],
+	providers: [PictureService, PrismaService, LogService, FileService],
 	imports: [
 		MulterModule.register({
-			dest: path.resolve(__dirname, process.env.UPLOAD_DIR),
+			dest: resolve(process.env.UPLOAD_DIR),
 			storage: diskStorage({
-				destination: path.resolve(__dirname, process.env.UPLOAD_DIR),
+				destination: resolve(process.env.UPLOAD_DIR),
 				filename: (req, file, callback) => {
 					const fileExtName = extname(
 						file.originalname,

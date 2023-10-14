@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LogService } from 'src/log.service';
 import { PrismaService } from 'src/prisma.service';
+import { FileService } from 'src/file.service';
 import { IPictureDto } from './picture.dto';
 
 @Injectable()
@@ -8,47 +9,55 @@ export class PictureService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: LogService,
+		private readonly fileService: FileService,
 	) { }
 
-	async addPicture(category: string, file: Express.Multer.File) {
-		console.log(file)
+	async addPicture(
+		category: string,
+		file: Express.Multer.File,
+		pucture: IPictureDto,
+	) {
 		let result;
 		try {
 			const cat = await this.prisma.category.findFirst({
 				where: {
-					link: category
-				}
-			})
+					link: category,
+				},
+			});
 			if (cat)
 				result = await this.prisma.picture.create({
 					data: {
 						link: file.filename,
-						name: file.originalname,
-						date: '',
+						name: pucture.name,
+						date: pucture.date,
+						material: pucture.material,
 						categoryId: cat.id,
-					}
+					},
 				});
-		}
-		catch (e) {
+			let res = await this.fileService.createPreview(file.filename);
+			res = await this.fileService.createPublic(file.filename);
+		} catch (e) {
 			await this.logger.LogMessage(e, 'Error upload file');
 		}
 		return result;
 	}
 
 	async getPictures(category?: string) {
-		const cond = category ? {
-			category: {
-				link: category
+		const cond = category
+			? {
+				category: {
+					link: category,
+				},
 			}
-		} : undefined;
+			: undefined;
 
 		const result = await this.prisma.picture.findMany({
 			select: {
-				...this.getReturnField()
+				...this.getReturnField(),
 			},
 			where: {
-				...cond
-			}
+				...cond,
+			},
 		});
 		return result;
 	}
@@ -56,11 +65,11 @@ export class PictureService {
 	async getPicturesById(id: number) {
 		const result = await this.prisma.picture.findFirst({
 			select: {
-				...this.getReturnField()
+				...this.getReturnField(),
 			},
 			where: {
-				id: id
-			}
+				id: id,
+			},
 		});
 		return result;
 	}
@@ -76,7 +85,16 @@ export class PictureService {
 		let result = [];
 		let cnt = await this.prisma.picture.count();
 		let setcnt = Math.floor(cnt / count);
-		const orderBy = this.randomString(['id', 'categoryId', 'date', `link`, `material`, `created`, `updated`, `name`]);
+		const orderBy = this.randomString([
+			'id',
+			'categoryId',
+			'date',
+			`link`,
+			`material`,
+			`created`,
+			`updated`,
+			`name`,
+		]);
 		const orderDir = this.randomString([`asc`, `desc`]);
 		try {
 			for (let i = 0; i < count; i++) {
@@ -84,16 +102,16 @@ export class PictureService {
 					take: 1,
 					skip: this.randomNumber(i * setcnt, (i + 1) * setcnt - 1),
 					select: {
-						...this.getReturnField()
+						...this.getReturnField(),
 					},
 					where: {
 						category: {
-							visible: true
-						}
+							visible: true,
+						},
 					},
-					orderBy: { [orderBy]: orderDir }
+					orderBy: { [orderBy]: orderDir },
 				});
-				result.push(item)
+				result.push(item);
 			}
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Error random picture');
@@ -121,26 +139,22 @@ export class PictureService {
 	}
 
 	async delPicture(picId: number) {
-		var fs = require('fs');
-		var path = require('path');
 		let result;
 		try {
 			result = await this.prisma.picture.findFirst({
 				where: {
-					id: picId
-				}
+					id: picId,
+				},
 			});
 			if (result) {
-				const file = path.resolve(__dirname, process.env.UPLOAD_DIR, result.link)
-				if (fs.existsSync(file)) fs.unlinkSync(file);
+				this.fileService.delFile(result.link)
 				result = await this.prisma.picture.deleteMany({
 					where: {
-						id: picId
-					}
+						id: picId,
+					},
 				});
 			}
-		}
-		catch (e) {
+		} catch (e) {
 			await this.logger.LogMessage(e, 'Error upload file');
 		}
 		return result;
@@ -157,9 +171,9 @@ export class PictureService {
 			category: {
 				select: {
 					name: true,
-					link: true
-				}
-			}
-		}
+					link: true,
+				},
+			},
+		};
 	}
 }

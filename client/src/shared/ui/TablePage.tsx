@@ -6,6 +6,7 @@ class TablePageProps {
     title?: string;
     children?: ReactNode;
     refresh?: () => void;
+    refreshTitle?: string;
 }
 
 export const TablePage: FC<TablePageProps> = (props) => {
@@ -24,7 +25,7 @@ export const TablePage: FC<TablePageProps> = (props) => {
                         size="small"
                         onClick={props.refresh}
                         variant="outlined">
-                        Refresh
+                        {props.refreshTitle ?? 'Refresh'}
                     </Button>
                 )}
                 <Grid container direction={'column'}>

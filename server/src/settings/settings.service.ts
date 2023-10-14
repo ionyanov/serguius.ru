@@ -9,7 +9,7 @@ export class SettingsService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: LogService,
-	) { }
+	) {}
 
 	async getAll() {
 		let result = {};

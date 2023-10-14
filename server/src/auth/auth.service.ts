@@ -16,22 +16,24 @@ export class AuthService {
 		private readonly userSrv: UserService,
 		private readonly jwt: JwtService,
 		private readonly logger: LogService,
-	) { }
+	) {}
 
 	async register(body: AuthDto) {
 		let user: User;
 		let tokens: any;
 		try {
+			if (!body.email)
+				throw new BadRequestException('User cant be empty');
+
 			const oldUser = await this.userSrv.getUserByEmail(body.email);
 			if (oldUser) throw new BadRequestException('User already exists');
 
 			user = await this.userSrv.create(body.email, body.password);
-			tokens = await this.issueTokes(user.id);
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Can`t register user!');
 		}
 
-		return { user: this.userSrv.returnAuthUserFields(user), ...tokens };
+		return { user: this.userSrv.returnAuthUserFields(user) };
 	}
 
 	async login(body: AuthDto) {
@@ -44,11 +46,9 @@ export class AuthService {
 	async getProfile(userId: string) {
 		let user: User;
 		try {
-			if (!userId)
-				throw new BadRequestException('Can`t find user!');
+			if (!userId) throw new BadRequestException('Can`t find user!');
 			user = await this.userSrv.getUserById(+userId);
-		}
-		catch (e) {
+		} catch (e) {
 			await this.logger.LogMessage(e, 'Can`t find user!');
 		}
 		return this.userSrv.returnAuthUserFields(user);

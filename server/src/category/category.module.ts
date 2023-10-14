@@ -6,6 +6,6 @@ import { LogService } from 'src/log.service';
 
 @Module({
 	controllers: [CategoryController],
-	providers: [CategoryService, PrismaService, LogService],
+	providers: [CategoryService, PrismaService, LogService]
 })
-export class CategoryModule {}
+export class CategoryModule { }
