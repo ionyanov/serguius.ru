@@ -12,8 +12,9 @@ export class NextapiController {
   }
 
   @Get('category/:category')
-  getCategory(@Param('category') category: string) {
-    return this.categoryService.getCategories({ link: category })[0];
+  async getCategory(@Param('category') category: string) {
+    const categories = await this.categoryService.getCategories({ link: category })
+    return categories[0];
   }
 
   @Get('picture')

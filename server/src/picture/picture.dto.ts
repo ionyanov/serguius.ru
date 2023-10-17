@@ -3,4 +3,5 @@ export interface IPictureDto {
 	name: string;
 	date: string;
 	material: string;
+	size: string;
 }

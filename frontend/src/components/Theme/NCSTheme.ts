@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import { NONAME } from 'dns';
 
 enum COLORS {
     MAIN_DARK = '#034d58',
@@ -39,7 +38,7 @@ export const NCSTheme = createTheme({
         },
     },
     typography: {
-        fontFamily: 'Nanum Gothic Coding',
+        fontFamily: 'Century Schoolbook,san-serif',
         fontSize: 14,
         h1: {
             fontSize: '2.5rem',
@@ -47,6 +46,7 @@ export const NCSTheme = createTheme({
         h2: {
             fontSize: '2rem',
             fontWeight: 900,
+            textAlign: 'center'
         },
         h3: {
             fontSize: '1.5rem',
@@ -71,6 +71,7 @@ export const NCSTheme = createTheme({
                     justifyContent: 'center',
                     width: '100%',
                     minHeight: '100%',
+                    overflowX: 'hidden',
                     '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
                         width: '10px',
                         height: '10px',
@@ -101,6 +102,17 @@ export const NCSTheme = createTheme({
                     width: '100%',
                     minHeight: '100vh',
                 },
+                '@global': {
+                    '@fontFace': `{
+                        font-family: 'Century Schoolbook';
+                        src: url('/CenturySchoolbook.woff2') format('woff2'),
+                            url('/CenturySchoolbook.woff') format('woff'),
+                            url('/CenturySchoolbook.ttf') format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                        font-display: swap;
+                    }`,
+                }
             },
         },
         MuiContainer: {
@@ -133,14 +145,13 @@ export const NCSTheme = createTheme({
                 }
             },
         },
-        MuiTableCell: {
+        MuiMasonry: {
             styleOverrides: {
                 root: {
-                    border: 'none',
-                    padding: '0',
-                    paddingRight: '5px'
-                }
-            }
-        }
+                    alignContent: 'center',
+                    margin: 0
+                },
+            },
+        },
     },
 });

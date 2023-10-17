@@ -48,6 +48,7 @@ model Picture {
   name       String
   date       String?
   material   String?
+  size       String?
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
 }

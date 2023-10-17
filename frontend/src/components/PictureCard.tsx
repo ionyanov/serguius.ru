@@ -14,8 +14,8 @@ export const PictureCard: FC<PictureCardProps> = (props) => {
 		<Stack direction={'column'} alignItems={'center'}>
 			<Typography variant="h2">{props.picture.name}</Typography>
 			<img
-				srcSet={`/images/${props.picture.link}?w=248&fit=crop&auto=format&dpr=2 2x`}
-				src={`/images/${props.picture.link}?w=248&fit=crop&auto=format`}
+				srcSet={`/images/public/${props.picture.link}?w=248&fit=crop&auto=format&dpr=2 2x`}
+				src={`/images/public/${props.picture.link}?w=248&fit=crop&auto=format`}
 				alt={props.picture.name}
 				style={{ maxHeight: '100vh', maxWidth: '100%' }}
 				width={'auto'}

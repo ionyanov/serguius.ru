@@ -11,9 +11,18 @@ export interface IPicture {
 	link: string;
 	date?: string;
 	material?: string;
+	size?: string;
 	categoryId?: number;
 	category: {
 		name: string,
 		link: string
 	}
+}
+
+export interface CategoryPageProps {
+	params: { category: string };
+}
+
+export interface CategoryLayoutProps extends CategoryPageProps {
+	children: React.ReactNode
 }

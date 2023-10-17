@@ -5,17 +5,18 @@ import {
     useSetPictureMutation,
 } from '../model/paimages.api';
 import { Delete, Save } from '@mui/icons-material';
-import { IProductImages } from '../model/paimages.type';
+import { IPicture } from '../model/paimages.type';
 import { getImagePath } from '@/shared/const/router';
 
 interface PictureCardProps {
-    img: IProductImages;
+    img: IPicture;
 }
 
 export const PictureCard: FC<PictureCardProps> = ({ img }) => {
     const [name, setName] = useState(img.name);
     const [date, setDate] = useState(img.date);
     const [material, setMaterial] = useState(img.material);
+    const [size, setSize] = useState(img.size);
 
     const [onDelete] = useDelPictureMutation();
     const [onUpdate] = useSetPictureMutation();
@@ -26,8 +27,9 @@ export const PictureCard: FC<PictureCardProps> = ({ img }) => {
             name: name,
             date: date,
             material: material,
+            size: size,
         });
-    }, [img, name, date, material]);
+    }, [img, name, date, material, size]);
 
     return (
         <Stack gap={1} spacing={1} alignItems={'center'} justifyContent={'end'}>
@@ -48,13 +50,22 @@ export const PictureCard: FC<PictureCardProps> = ({ img }) => {
                 defaultValue={img.name}
                 onChange={(event) => setName(event.target.value)}
             />
-            <TextField
-                placeholder="Дата изготовления"
-                multiline
-                fullWidth
-                defaultValue={img.date}
-                onChange={(event) => setDate(event.target.value)}
-            />
+            <Stack direction={'row'}>
+                <TextField
+                    placeholder="Дата изготовления"
+                    multiline
+                    fullWidth
+                    defaultValue={img.date}
+                    onChange={(event) => setDate(event.target.value)}
+                />
+                <TextField
+                    placeholder="Размер"
+                    multiline
+                    fullWidth
+                    defaultValue={img.size}
+                    onChange={(event) => setSize(event.target.value)}
+                />
+            </Stack>
             <TextField
                 placeholder="Материал"
                 multiline

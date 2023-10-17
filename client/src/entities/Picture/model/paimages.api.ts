@@ -1,5 +1,5 @@
 import { rtkAPI } from '@/shared/api/rtkAPI';
-import { IProductImages } from './paimages.type';
+import { IPicture } from './paimages.type';
 
 const tag = 'ProductImages';
 const imagesApi = rtkAPI.enhanceEndpoints({ addTagTypes: [tag] }).injectEndpoints({
@@ -12,14 +12,14 @@ const imagesApi = rtkAPI.enhanceEndpoints({ addTagTypes: [tag] }).injectEndpoint
             }),
             invalidatesTags: [tag]
         }),
-        getPictures: build.query<IProductImages[], string>({
+        getPictures: build.query<IPicture[], string>({
             query: (category) => ({
                 url: `/picture/${category}`,
                 method: 'GET',
             }),
             providesTags: [tag]
         }),
-        setPicture: build.mutation<undefined, IProductImages>({
+        setPicture: build.mutation<undefined, IPicture>({
             query: (data) => ({
                 url: `/picture`,
                 method: 'POST',

@@ -4,6 +4,7 @@ import { Stack, Typography } from '@mui/material';
 import { getPicturesByCategory } from '@/api/getPicturesByCategory';
 import { getCategories } from '@/api/getCategories';
 import { PicturesGrid } from '@/components/PicturesGrid';
+import { CategoryPageProps } from '@/types/type';
 //import { useRouter } from 'next/router';
 //import { useEffect } from 'react';
 //import { useLastViewedPhoto } from '@/provider/utils/useLastViewedPhoto';
@@ -18,9 +19,6 @@ export async function generateStaticParams() {
 	}));
 }
 
-interface CategoryPageProps {
-	params: { category: string };
-}
 export default async function CategoryPage(props: CategoryPageProps) {
 	//const router = useRouter();
 	//const { photoId } = router.query;
@@ -44,10 +42,5 @@ export default async function CategoryPage(props: CategoryPageProps) {
 					}}
 				/>
 				)*/
-	return (
-		<Stack direction={'column'} width={'100vw'} spacing={5} alignItems={'center'} margin={'30px'}>
-			<Typography variant="h1">{props.params.category}</Typography>
-			<PicturesGrid data={data} />
-		</Stack>
-	);
+	return <PicturesGrid data={data} />;
 }

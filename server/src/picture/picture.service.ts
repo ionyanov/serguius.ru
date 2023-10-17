@@ -15,7 +15,7 @@ export class PictureService {
 	async addPicture(
 		category: string,
 		file: Express.Multer.File,
-		pucture: IPictureDto,
+		picture: IPictureDto,
 	) {
 		let result;
 		try {
@@ -28,9 +28,10 @@ export class PictureService {
 				result = await this.prisma.picture.create({
 					data: {
 						link: file.filename,
-						name: pucture.name,
-						date: pucture.date,
-						material: pucture.material,
+						name: picture.name,
+						date: picture.date,
+						material: picture.material,
+						size: picture.size,
 						categoryId: cat.id,
 					},
 				});
@@ -91,6 +92,7 @@ export class PictureService {
 			'date',
 			`link`,
 			`material`,
+			`size`,
 			`created`,
 			`updated`,
 			`name`,
@@ -127,6 +129,7 @@ export class PictureService {
 					name: picture.name,
 					material: picture.material,
 					date: picture.date,
+					size: picture.size,
 				},
 				where: {
 					id: picture.id,
@@ -167,6 +170,7 @@ export class PictureService {
 			link: true,
 			material: true,
 			date: true,
+			size: true,
 			categoryId: true,
 			category: {
 				select: {

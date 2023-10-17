@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { existsSync, unlinkSync } from 'fs';
+import { execSync } from 'child_process';
+import { existsSync, unlinkSync, mkdir } from 'fs';
 import { resolve } from 'path';
 import sharp from 'sharp';
 
@@ -87,14 +88,17 @@ export class FileService {
 	}
 
 	private getFilePath(fileName): string {
+		if (!existsSync(process.env.UPLOAD_DIR)) mkdir(process.env.UPLOAD_DIR, (error => { throw error }));
 		return resolve(process.env.UPLOAD_DIR, fileName);
 	}
 
 	private getPreviewPath(fileName): string {
+		if (!existsSync(process.env.PREVIEW_DIR)) mkdir(process.env.PREVIEW_DIR, (error => { throw error }));
 		return resolve(process.env.PREVIEW_DIR, fileName);
 	}
 
 	private getPublicPath(fileName): string {
+		if (!existsSync(process.env.PUBLIC_DIR)) mkdir(process.env.PUBLIC_DIR, (error => { throw error }));
 		return resolve(process.env.PUBLIC_DIR, fileName);
 	}
 }
