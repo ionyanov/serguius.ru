@@ -11,8 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
-public/images/public/*.jpg
-public/images/src/*.jpg
+public/images/preview
+public/images/public
+public/images/src
 
 analyse.html
 .env*

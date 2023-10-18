@@ -20,7 +20,7 @@ export interface IPicture {
 }
 
 export interface CategoryPageProps {
-	params: { category: string };
+	params: { category: string[] };
 }
 
 export interface CategoryLayoutProps extends CategoryPageProps {

@@ -44,20 +44,16 @@ export const NCSTheme = createTheme({
             fontSize: '2.5rem',
         },
         h2: {
-            fontSize: '2rem',
-            fontWeight: 900,
+            fontSize: '1.5rem',
+            fontWeight: 800,
             textAlign: 'center'
         },
         h3: {
             fontSize: '1.5rem',
-            fontWeight: 800,
+            fontWeight: 300,
         },
-        h4: {
-            fontSize: '1.2rem',
-            fontWeight: 800,
-        },
-        h5: {
-            fontSize: '1.2rem',
+        h6: {
+            color: COLORS.MAIN_DARK,
         },
         button: {
             color: COLORS.MAIN_DARK,
@@ -137,20 +133,12 @@ export const NCSTheme = createTheme({
                 root: {
                     color: COLORS.MAIN_LIGHT,
                     textTransform: 'unset',
-                    fontSize: '1.5rem',
+                    fontSize: '1.2rem',
                     minWidth: 'unset',
                 },
                 textSecondary: {
                     color: COLORS.MAIN_DARK
                 }
-            },
-        },
-        MuiMasonry: {
-            styleOverrides: {
-                root: {
-                    alignContent: 'center',
-                    margin: 0
-                },
             },
         },
     },

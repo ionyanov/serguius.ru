@@ -10,7 +10,7 @@ export class LogService {
 		if (msg)
 			await this.prisma.logs.create({
 				data: {
-					message: `${msg}:${JSON.stringify(e)}`,
+					message: `${msg}${e ? `:${JSON.stringify(e)}` : ''}`,
 					type: type ?? 'INFO'
 				}
 			})

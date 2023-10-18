@@ -12,12 +12,13 @@ interface PicturesGridProps {
 
 export async function PicturesGrid({ data, width, height }: PicturesGridProps) {
 	return (
-		<Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}>
+		<Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }} sx={{ alignContent: 'center', margin: 0 }}>
 			{data.map((pic) => (
 				<PictureLink
 					key={pic.id}
 					id={pic.id}
-					link={pic.link}
+					category={pic.category.link}
+					imgSrc={pic.link}
 					title={pic.name}
 					subtitle={[pic.material, pic.date, pic.size].filter((item) => item).join('. ')}
 					width={width}

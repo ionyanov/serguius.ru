@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import Image from 'next/image';
-import { Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { IPicture } from '@/types/type';
 
 interface PictureCardProps {
@@ -11,20 +11,22 @@ interface PictureCardProps {
 
 export const PictureCard: FC<PictureCardProps> = (props) => {
 	return (
-		<Stack direction={'column'} alignItems={'center'}>
-			<Typography variant="h2">{props.picture.name}</Typography>
+		<Stack direction={'column'} alignItems={'center'} spacing={1}>
 			<img
-				srcSet={`/images/public/${props.picture.link}?w=248&fit=crop&auto=format&dpr=2 2x`}
-				src={`/images/public/${props.picture.link}?w=248&fit=crop&auto=format`}
+				srcSet={`/images/public/${props.picture.link}`}
+				src={`/images/public/${props.picture.link}`}
 				alt={props.picture.name}
-				style={{ maxHeight: '100vh', maxWidth: '100%' }}
+				style={{ maxHeight: '80vh', maxWidth: '95vw' }}
 				width={'auto'}
 				loading="lazy"
 			/>
-			<Typography variant="h3">
-				{props.picture.date ? `(${props.picture.date})` : ''}
-				{props.picture.material}
-			</Typography>
+			<Paper style={{ width: '100%' }}>
+				<Typography variant="h6">
+					{props.picture.name}
+					<br />
+					{[props.picture.material, props.picture.date, props.picture.size].filter((item) => item).join('. ')}
+				</Typography>
+			</Paper>
 		</Stack>
 	);
 };

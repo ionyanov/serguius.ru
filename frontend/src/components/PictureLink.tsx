@@ -1,28 +1,26 @@
 /** @format */
 
 import { FC } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { IPicture } from '@/types/type';
-import { IconButton, ImageListItem, ImageListItemBar } from '@mui/material';
+import { ImageListItem, ImageListItemBar } from '@mui/material';
 
 interface PictureLinkProps {
-	id: number;
-	link: string;
+	imgSrc: string;
+	category: string;
+	id?: number;
 	title?: string;
 	subtitle?: string;
 	width?: number;
 	height?: number;
 }
 
-export const PictureLink: FC<PictureLinkProps> = ({ id, link, title, subtitle, height = 400 }) => {
-	//<Image alt={picture.name} src={`${picture.link}`} width={width} height={height} />
+export const PictureLink: FC<PictureLinkProps> = ({ id, imgSrc, category, title, subtitle, height = 400 }) => {
 	return (
-		<Link key={id} href={`/?photoId=${id}`} as={`/p/${id}`} shallow>
+		<Link href={`/${category}/${id ? id : ''}`} as={`/${category}/${id ? id : ''}`} replace={true}>
 			<ImageListItem>
 				<img
-					srcSet={`/images/preview/${link}?w=248&fit=crop&auto=format&dpr=2 2x`}
-					src={`/images/preview/${link}?w=248&fit=crop&auto=format`}
+					srcSet={`/images/preview/${imgSrc}`}
+					src={`/images/preview/${imgSrc}`}
 					alt={title}
 					style={{ maxHeight: height }}
 					width={'auto'}
