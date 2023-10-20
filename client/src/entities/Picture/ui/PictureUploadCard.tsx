@@ -14,6 +14,7 @@ export const PictureloadCard: FC<PictureloadCardProps> = (args) => {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [material, setMaterial] = useState('');
+    const [size, setSize] = useState('');
 
     const [uploadImage, uploadImageProps] = useUploadPictureMutation();
 
@@ -40,6 +41,7 @@ export const PictureloadCard: FC<PictureloadCardProps> = (args) => {
             formData.append(`file`, file);
             formData.append('name', name);
             formData.append('date', date);
+            formData.append('size', size);
             formData.append('material', material);
             uploadImage({
                 category: args.category,
@@ -54,6 +56,7 @@ export const PictureloadCard: FC<PictureloadCardProps> = (args) => {
                     setName('');
                     setDate('');
                     setMaterial('');
+                    setSize('');
                 }, 1000);
             });
         }
@@ -87,13 +90,22 @@ export const PictureloadCard: FC<PictureloadCardProps> = (args) => {
                 value={name}
                 onChange={(event) => setName(event.target.value)}
             />
-            <TextField
-                placeholder="Дата изготовления"
-                multiline
-                fullWidth
-                value={date}
-                onChange={(event) => setDate(event.target.value)}
-            />
+            <Stack direction={'row'}>
+                <TextField
+                    placeholder="Дата изготовления"
+                    multiline
+                    fullWidth
+                    defaultValue={date}
+                    onChange={(event) => setDate(event.target.value)}
+                />
+                <TextField
+                    placeholder="Размер"
+                    multiline
+                    fullWidth
+                    defaultValue={size}
+                    onChange={(event) => setSize(event.target.value)}
+                />
+            </Stack>
             <TextField
                 placeholder="Материал"
                 multiline
