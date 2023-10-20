@@ -1,6 +1,6 @@
 /** @format */
 
-import { IconButton, ImageList, ImageListItem, ImageListItemBar, ListSubheader, Stack } from '@mui/material';
+import { ImageList, Stack } from '@mui/material';
 import { getRandomPictures } from '@/api/getRandomPictures';
 import { PictureLink } from './PictureLink';
 

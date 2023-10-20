@@ -6,15 +6,15 @@ import { Modal } from '@mui/material';
 import { IPicture } from '@/types/type';
 import { PictureCard } from './PictureCard';
 
-export function PictureModal(props: { picture: IPicture; reopenFlg?: Date }) {
-	const [open, setOpen] = useState(true);
+interface PictureModalProps {
+	picture: IPicture;
+	open: boolean;
+	onClose: () => void;
+}
 
-	useEffect(() => {
-		() => setOpen(true);
-	}, [props.reopenFlg]);
-
+export function PictureModal(props: PictureModalProps) {
 	return (
-		<Modal open={open} onClose={() => setOpen(false)}>
+		<Modal open={props.open} onClose={() => props.onClose()}>
 			<div
 				style={{
 					position: 'absolute',

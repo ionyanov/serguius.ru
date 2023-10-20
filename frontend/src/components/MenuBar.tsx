@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { Button, Grid, Typography } from '@mui/material';
 import { getCategories } from '@/api/getCategories';
 import { MenuBarItem } from './MenuItem';
-import { getCategory } from '@/api/getCategory';
 
 interface MenuBarProps {
 	categoryslug?: string;

@@ -1,8 +1,7 @@
 /** @format */
 
 import { FC } from 'react';
-import Image from 'next/image';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { IPicture } from '@/types/type';
 
 interface PictureCardProps {

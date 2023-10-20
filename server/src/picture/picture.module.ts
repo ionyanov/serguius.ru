@@ -13,9 +13,9 @@ import { FileService } from 'src/file.service';
 	providers: [PictureService, PrismaService, LogService, FileService],
 	imports: [
 		MulterModule.register({
-			dest: resolve(process.env.UPLOAD_DIR),
+			dest: process.env.UPLOAD_DIR,
 			storage: diskStorage({
-				destination: resolve(process.env.UPLOAD_DIR),
+				destination: process.env.UPLOAD_DIR,
 				filename: (req, file, callback) => {
 					const fileExtName = extname(
 						file.originalname,

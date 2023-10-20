@@ -1,5 +1,4 @@
 /** @format */
-
 import { CategoryPageProps } from '@/types/type';
 import { getPicturesByCategory } from '@/api/getPicturesByCategory';
 import { getCategories } from '@/api/getCategories';
@@ -19,20 +18,16 @@ export async function generateStaticParams() {
 
 export default async function CategoryPage(props: CategoryPageProps) {
 	const data = await getPicturesByCategory(props.params.category[0]);
-	let picComp: ReactNode = undefined;
+	let picData = undefined;
 	if (props.params.category.length > 1) {
 		let pictureid = Number.parseInt(props.params.category[1]);
 		if (pictureid) {
-			const picData = await getPictureById(pictureid);
-			console.log(1);
-			if (picData) picComp = <PictureModal picture={picData} reopenFlg={new Date()} />;
+			picData = await getPictureById(pictureid);
 		}
 	}
-	console.log(props.params.category);
 	return (
 		<>
-			<PicturesGrid data={data} />
-			{picComp}
+			<PicturesGrid data={data} curenrPic={picData} />
 		</>
 	);
 }

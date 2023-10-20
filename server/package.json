@@ -6,12 +6,12 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "set NODE_ENV=production && nest build",
+    "build": "set NODE_ENV=PRODUCTION && nest build",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "start:prod": "set NODE_ENV=production && node dist/main"
+    "start:prod": "set NODE_ENV=PRODUCTION && node dist/main"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.9.1",
