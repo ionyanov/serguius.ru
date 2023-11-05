@@ -19,7 +19,7 @@ export function PictureLink({ imgSrc, category, id, show, title, subtitle }: Pic
 				srcSet={`/images/preview/${imgSrc}`}
 				src={`/images/preview/${imgSrc}`}
 				alt={title}
-				style={{ maxHeight: 400 }}
+				style={{ maxHeight: 400, maxWidth: '80vw' }}
 				width={'auto'}
 				loading="lazy"
 			/>

@@ -5,8 +5,6 @@ import { getCategories } from '@/api/getCategories';
 import { getAllPictures } from '@/api/getAllPictures';
 import { getPictureById } from '@/api/getPictureById';
 import { PicturesGrid } from '@/components/PicturesGrid';
-import { PictureModal } from '@/components/PictureModal';
-import { ReactNode } from 'react';
 
 export async function generateStaticParams() {
 	const category = await getCategories();

@@ -9,7 +9,7 @@ export class SettingsService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private readonly logger: LogService,
-	) {}
+	) { }
 
 	async getAll() {
 		let result = {};
@@ -37,7 +37,8 @@ export class SettingsService {
 					name: 'asc',
 				},
 			});
-			result = settings.value;
+			if (settings)
+				result = settings.value;
 		} catch (e) {
 			await this.logger.LogMessage(e, 'Error getting settings');
 		}

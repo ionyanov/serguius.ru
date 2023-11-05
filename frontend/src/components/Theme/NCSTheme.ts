@@ -45,7 +45,7 @@ export const NCSTheme = createTheme({
         },
         h2: {
             fontSize: '1.5rem',
-            fontWeight: 800,
+            fontWeight: 100,
             textAlign: 'center'
         },
         h3: {

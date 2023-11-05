@@ -1,18 +1,21 @@
 /** @format */
 
+import { Settings, getSettings } from '@/api/getSettings';
 import { ThemeProvider } from '@/components/Theme';
 import type { Metadata } from 'next';
 
+const title = await getSettings(Settings.TITLE);
+const keywords = await getSettings(Settings.KEYWORDS);
+
 export const metadata: Metadata = {
-	title: { default: 'Serguius.ru', template: '%s | Serguius.ru' },
-	description:
-		'Агасарян Кирсанов Продам Куплю Картины Современные художники Московский художник Художники Рисунки Искусство Галереи Живопись Фреска Графика Фотографии Иконы Интерьеры Роспись Узоры Дизайн Ремонт Офорты Гравюры Орнаменты Витражи Копии Портреты Пейзажи Резьба по дереву Agasaryen Agasaryan',
+	title: { default: title ?? 'Serguius.ru', template: `%s | ${title ?? 'Serguius.ru'}` },
+	keywords: keywords ?? '',
 };
 
 export default function RootLayout(props: { children: React.ReactNode }) {
 	return (
 		<html>
-			<body>
+			<body style={{ width: '100%' }}>
 				<ThemeProvider>{props.children}</ThemeProvider>
 			</body>
 		</html>

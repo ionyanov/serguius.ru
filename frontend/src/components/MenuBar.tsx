@@ -30,6 +30,7 @@ export const MenuBar: FC<MenuBarProps> = async (props) => {
 					.map((cat) => {
 						return <MenuBarItem items={categories} key={cat.id} depthLevel={0} curItem={cat} />;
 					})}
+				<MenuBarItem items={[]} depthLevel={0} curItem={{ id: -1, name: 'Contacts', link: 'contacts' }} />
 			</Grid>
 		</Grid>
 	);
