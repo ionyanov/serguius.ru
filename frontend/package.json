@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "set NODE_ENV=production && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker": "set HOSTNAME=127.0.0.1 && next dev"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

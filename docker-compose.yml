@@ -1,0 +1,92 @@
+version: '3.8'
+
+networks:
+  default:
+
+services:
+
+  db:
+    container_name:  serguius-db
+    image: mysql:8.2.0
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: serguius
+      MYSQL_ROOT_PASSWORD: serguius
+      MYSQL_USER: serguius
+      MYSQL_PASSWORD: serguius
+    ports:
+      - 3306:3306
+    networks:
+      - default
+    volumes:
+      - ./dockerdb:/var/lib/mysql
+      - ./dockerdbinit:/docker-entrypoint-initdb.d/
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: serguius-phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+
+  server:
+    container_name: serguius-server
+    restart: unless-stopped
+    build: ./server/
+    volumes:
+      - ./dockerfiles:/app/images
+      - ./server/src:/app/src
+      - ./server/docker.env:/app/.env
+    command: npm run dev
+    ports:
+      - 5000:5000
+    links:
+      - db
+    stdin_open: true
+    networks:
+      - default
+
+  client:
+    container_name: serguius-client
+    restart: unless-stopped
+    build: ./client/
+    working_dir: /app
+    volumes:
+      - ./client/src:/app/src
+      - ./dockerfiles:/app/public/images
+    command: npx vite --host 0.0.0.0
+    ports:
+      - 5173:5173
+    networks:
+      - default
+
+  frontend:
+    container_name: serguius-frontend
+    restart: unless-stopped
+    build: ./frontend/
+    working_dir: /app
+    links:
+      - server
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/docker.env:/app/.env
+      - ./dockerfiles/src:/app/public/images/src
+      - ./dockerfiles/preview:/app/public/images/preview
+      - ./dockerfiles/public:/app/public/images/public
+    command: npm run docker
+    ports:
+      - 3000:3000
+    networks:
+      - default
+
+volumes:
+  dockerdb:
